@@ -1,0 +1,39 @@
+@inject IMessage Message
+@inject IAdvancedMessage AdvancedMessage
+<ContentView>
+    <StackLayout Margin="new Thickness(20)">
+
+        <Label Text="Hello, World!"
+               FontSize="40" />
+
+        <Counter />
+        
+        <Button OnClick="@SendMessage">Muestra mensaje</Button>
+        <Button OnClick="@SendSnack">Muestra Snack</Button>
+        <Label Text="@MessageToast"></Label>
+
+    </StackLayout>
+</ContentView>
+
+@code{
+    override protected async Task OnInitializedAsync()
+    {
+        MessageToast = "";
+    }
+    public string MessageToast { get; set; }
+    public int CounterSnack { get; set; }
+    public void SendMessage()
+    {
+        Message.ShowMessage("Hola desde Blazor mobile usando mensage nativo");
+        CounterSnack = 0;
+    }
+    public void SendSnack()
+    {
+        AdvancedMessage.ShowMessageAndCatchAction("Hola Snack", o =>
+        {
+            CounterSnack++;
+            MessageToast = $"{o} {CounterSnack}";
+            StateHasChanged();
+        });
+    }
+}
